@@ -23,11 +23,13 @@ public class TodoService {
 
     public List<Todo> read() {
         Sort sort = Sort.by("prioridade").descending().and(
-            Sort.by("name").ascending());
+            Sort.by("nome").ascending());
         return todoRepository.findAll(sort);
     }
 
-    public List<Todo> update(Todo todo) {
+    public List<Todo> update(Long id, Todo todo) {
+        if(!todoRepository.existsById(id)) throw new IllegalArgumentException("ID inválido: não é possível atualizar um item inexistente.");
+        todo.setId(id);
         todoRepository.save(todo);
         return read();
     }
